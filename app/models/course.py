@@ -1,8 +1,24 @@
-class Course:
+from app import db
+
+
+class Course(db.Model):
+
+    __tablename__ = "course"
+
+    id = db.Column(db.Integer, primary_key = True)
+    vehicle = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullble = False)
+    nextDeliverys = db.Column(db.Text, nullable=False)
+    kmTotal = db.Column(db.Float, nullable = False)
+
+    vehicleCourse = db.relationship('Vehicle', foreign_keys=vehicle._id)
+
     def __init__(self, vehicle, nextDeliverys, kmTotal):
         self._vehicle = vehicle
         self._nextDeliverys = nextDeliverys
         self._kmTotal = kmTotal
+
+    def __repr__(self):
+        return "<Course %r>" % self._vehicle
 
     @property
     def vehicle(self):

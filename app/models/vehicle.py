@@ -1,9 +1,25 @@
-class Vehicle:
+from app import db
+
+
+class Vehicle(db.Model):
+
+    __tablename__ = "vehicle"
+
+    id = db.Column(db.Integer, primary_key=True)
+    distributionCenter = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullble=False)
+    dimensions = db.Column(db.Integer, db.ForeignKey('dimensions.id'), nullble=False)
+    licensePlate = db.Column(db.String(80), nullable = True)
+
+    vehicleCapacity = db.relationship('Dimensions', foreign_keys=dimensions._id)
+
     def __init__(self, id, distributionCenter, licensePlate, dimensions):
         self._id = id
         self._distributionCenter = distributionCenter
         self._licensePlate = licensePlate
         self._dimensions = dimensions
+
+    def __repr__(self):
+        return "<vehicle %r>" % self._licensePlate
 
     @property
     def id(self):
@@ -36,3 +52,6 @@ class Vehicle:
     @dimensions.setter
     def dimensions(self, dimensions):
         self._dimensions = dimensions
+
+    def verifyMaximumCapacity(self, dimensions):
+        approved = False
